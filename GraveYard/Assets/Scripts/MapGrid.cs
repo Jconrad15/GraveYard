@@ -54,6 +54,25 @@ namespace GraveYard
             }
         }
 
+        public bool IsCellOpen(Vector3 selectedLocation)
+        {
+            Cell selectedCell = GetCell((int)selectedLocation.x, (int)selectedLocation.z);
+            if (selectedCell == null) { return false; }
+
+            return selectedCell.isOpen;
+        }
+
+        private Cell GetCell(int x, int z)
+        {
+            int index = (x * zSize) + z;
+            return cells[index];
+        }
+
+        public void PlaceAtCell(GameObject go)
+        {
+
+
+        }
 
     }
 }

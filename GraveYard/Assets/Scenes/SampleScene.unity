@@ -687,6 +687,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnManager: {fileID: 1232541522}
   isPlayerTurn: 0
+  mapGrid: {fileID: 1144662820}
+  characterPrefab: {fileID: 919132149155446097, guid: 0f2e85ff3f335fd42bd337b5b823b057, type: 3}
 --- !u!4 &1176362899
 Transform:
   m_ObjectHideFlags: 0

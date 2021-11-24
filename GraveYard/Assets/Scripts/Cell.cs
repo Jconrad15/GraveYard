@@ -8,11 +8,13 @@ namespace GraveYard
     {
         public int index;
         public Vector3 position;
+        public bool isOpen;
 
         public Cell(int newIndex, Vector3 newPosition)
         {
             index = newIndex;
             position = newPosition;
+            isOpen = true;
         }
 
     }
