@@ -17,19 +17,13 @@ namespace GraveYard
         [SerializeField]
         private GameObject characterPrefab;
 
-        private GameObject characterContainer;
-
-        private float heightOffset = 1f;
+        public readonly float heightOffset = 1f;
 
         // Start is called before the first frame update
         private void Start()
         {
             // Subscribe to on player turn event
             turnManager.OnPlayerTurn += TurnManager_OnPlayerTurn;
-
-            // Create game object to hold placed characters
-            characterContainer = new GameObject("Character Container");
-            characterContainer.transform.parent = this.transform;
         }
 
         private void TurnManager_OnPlayerTurn(object sender, EventArgs e)
@@ -53,14 +47,14 @@ namespace GraveYard
             // Get new character instance
             GameObject newCharacter = CreateCharacter();
 
-            bool isSelected = false;
-            while (isSelected == false)
+            bool isPlaced = false;
+            while (isPlaced == false)
             {
                 // Determine mouse location
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                // If ray hits something
+                // If ray hits something, move the character
                 if (Physics.Raycast(ray, out hit))
                 {
                     Vector3 characterPos = hit.transform.position;
@@ -69,35 +63,33 @@ namespace GraveYard
                     newCharacter.transform.position = characterPos;
                 }
 
-                // If click to place the character
+                // Try to place character when click
                 if (Input.GetMouseButtonDown(0))
                 {
-                    Debug.Log("click");
-                    // Check if location is available
-                    if (mapGrid.IsCellOpen(newCharacter.transform.position))
+                    if (mapGrid.TryPlaceObject(newCharacter, ObjectType.Player))
                     {
                         Debug.Log("Location selected");
-                        isSelected = true;
+                        isPlaced = true;
                     }
                     else
                     {
-                        Debug.Log("Cell is not open.");
+                        Debug.Log("Cell is not valid.");
                     }
                 }
 
                 yield return null;
             }
 
-            mapGrid.PlaceAtCell(newCharacter);
+            // Automate turn end here
+            //EndTurnSelected();
         }
 
-        private GameObject CreateCharacter()
+        public GameObject CreateCharacter()
         {
             GameObject newCharacter = Instantiate(characterPrefab, this.transform);
             newCharacter.name = "newCharacter";
-            newCharacter.transform.parent = characterContainer.transform;
 
-            Vector3 position = new Vector3(0, heightOffset, 0);
+            Vector3 position = new Vector3(0, 20f, 0);
             newCharacter.transform.position = position;
 
             return newCharacter;
@@ -113,14 +105,11 @@ namespace GraveYard
 
                 // Tell the battle controller to go to the next turn
                 turnManager.NextTurn();
-
-
             }
             else
             {
                 Debug.Log("It is not the player's turn.");
             }
-
         }
 
     }

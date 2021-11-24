@@ -642,6 +642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellMaterial: {fileID: 2100000, guid: 4c899c687095c8241a105c204a9ef9b5, type: 2}
+  playerController: {fileID: 1176362898}
 --- !u!4 &1144662821
 Transform:
   m_ObjectHideFlags: 0
