@@ -36,11 +36,18 @@ namespace GraveYard
 
                 if (rotDirection != 0)
                 {
-                    cam.transform.RotateAround(targetPos, Vector3.up, -rotDirection * rotAmount);
+                    StartCoroutine(Rotate(rotDirection));
                     canRotate = false;
                     StartCoroutine(RotationCoolDown());
                 }
             }
+        }
+
+        private IEnumerator Rotate(float rotDirection)
+        {
+            cam.transform.RotateAround(targetPos, Vector3.up, -rotDirection * rotAmount);
+
+            yield return null;
         }
 
         private IEnumerator RotationCoolDown()
