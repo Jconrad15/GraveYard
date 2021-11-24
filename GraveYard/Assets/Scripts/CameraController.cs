@@ -12,22 +12,41 @@ namespace GraveYard
         private Vector3 startRot = new Vector3(45f, 45f, 0f);
         private Vector3 targetPos = new Vector3(4.5f, 0, 4.5f);
 
-        private float rotSpeed = 10f;
+        private float rotAmount = 90f;
+
+        private bool canRotate;
+        private float rotCooldownTime = 0.3f;
 
         void OnEnable()
         {
             cam = GetComponent<Camera>();
             cam.transform.position = startPos;
             cam.transform.rotation = Quaternion.Euler(startRot);
+            canRotate = true;
         }
 
         // Update is called once per frame
         void Update()
         {
-            transform.LookAt(targetPos);
+            if (canRotate == true)
+            {
+                transform.LookAt(targetPos);
 
-            float rotMovement = Input.GetAxisRaw("Horizontal") * rotSpeed;
-            cam.transform.Translate(rotMovement * Time.deltaTime * Vector3.right);
+                float rotDirection = Input.GetAxisRaw("Horizontal");
+
+                if (rotDirection != 0)
+                {
+                    cam.transform.RotateAround(targetPos, Vector3.up, -rotDirection * rotAmount);
+                    canRotate = false;
+                    StartCoroutine(RotationCoolDown());
+                }
+            }
+        }
+
+        private IEnumerator RotationCoolDown()
+        {
+            yield return new WaitForSeconds(rotCooldownTime);
+            canRotate = true;
         }
     }
 }
