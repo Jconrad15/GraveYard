@@ -15,7 +15,7 @@ namespace GraveYard
         [SerializeField]
         private Material cellMaterial;
 
-        void OnEnable()
+        public void InitializeGrid()
         {
             GenerateMap();
             DisplayMap();
