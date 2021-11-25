@@ -20,6 +20,9 @@ namespace GraveYard
         [SerializeField]
         private PlayerController playerController;
 
+        [SerializeField]
+        private EnemyController enemyController;
+
         public void InitializeGrid()
         {
             GenerateMap();
@@ -29,10 +32,7 @@ namespace GraveYard
             CreatePlayerStartCharacter();
 
             // Create Enemy starting location
-            int enemyStartX = xSize - 2;
-            int enemyStartZ = zSize - 2;
-            //PlaceAtCell(  ENEMY  )
-
+            CreateEnemyStartCharacter();
 
             // Create obstacles
 
@@ -54,6 +54,26 @@ namespace GraveYard
             PlaceAtCell(GetCell(playerStartX, playerStartZ),
                         player,
                         ObjectType.Player);
+        }
+
+        private void CreateEnemyStartCharacter()
+        {
+            int enemyStartX = xSize - 2;
+            int enemyStartZ = zSize - 2;
+
+            GameObject enemy = enemyController.CreateCharacter();
+
+            Vector3 enemyPos = enemy.transform.position;
+            enemyPos.x = enemyStartX;
+            enemyPos.y = enemyController.heightOffset;
+            enemyPos.z = enemyStartZ;
+            enemy.transform.position = enemyPos;
+
+            Cell cell = GetCell(enemyStartX, enemyStartZ);
+            PlaceAtCell(cell, enemy, ObjectType.Enemy);
+
+            // Also add enemy location to enemy controller
+            enemyController.placedLocations.Add(cell);
         }
 
         private void GenerateMap()
@@ -127,13 +147,12 @@ namespace GraveYard
 
             int index = (x * zSize) + z;
 
-            // TODO: maybe delete following line, redundant
-            if (index < 0 || index > cells.Length) { Debug.Log("First check didn't catch this."); return null; }
+            if (index < 0 || index >= cells.Length) { Debug.Log("First check didn't catch this."); return null; }
 
             return cells[index];
         }
 
-        private Cell GetNeighbor(Cell cell, Direction direction)
+        public Cell GetNeighbor(Cell cell, Direction direction)
         {
             int x = (int)cell.position.x;
             int z = (int)cell.position.z;
@@ -177,6 +196,7 @@ namespace GraveYard
             for (int i = 0; i < 4; i++)
             {
                 Cell neighbor = GetNeighbor(cell, (Direction)i);
+                if (neighbor == null) { continue; }
                 if (neighbor.objectType == objType) { return true; }
             }
 

@@ -643,6 +643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellMaterial: {fileID: 2100000, guid: 4c899c687095c8241a105c204a9ef9b5, type: 2}
   playerController: {fileID: 1176362898}
+  enemyController: {fileID: 2091899316}
 --- !u!4 &1144662821
 Transform:
   m_ObjectHideFlags: 0
@@ -911,6 +912,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnManager: {fileID: 1232541522}
+  mapGrid: {fileID: 1144662820}
+  enemyPrefab: {fileID: 919132149155446097, guid: cdff2a9703b83214e81b08620349b2dd, type: 3}
 --- !u!4 &2091899317
 Transform:
   m_ObjectHideFlags: 0
