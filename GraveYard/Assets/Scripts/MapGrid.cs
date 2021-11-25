@@ -23,6 +23,9 @@ namespace GraveYard
         [SerializeField]
         private EnemyController enemyController;
 
+        [SerializeField]
+        private ObstacleManager obstacleManager;
+
         public void InitializeGrid()
         {
             GenerateMap();
@@ -35,7 +38,19 @@ namespace GraveYard
             CreateEnemyStartCharacter();
 
             // Create obstacles
+            CreateObstacles();
+        }
 
+        private void CreateObstacles()
+        {
+            int obstacleStartX = 5;
+            int obstacleStartZ = 5;
+
+            GameObject obstacle = obstacleManager.CreateObstacle(obstacleStartX, obstacleStartZ);
+
+            PlaceAtCell(GetCell(obstacleStartX, obstacleStartZ),
+                        obstacle,
+                        ObjectType.Obstacle);
         }
 
         private void CreatePlayerStartCharacter()

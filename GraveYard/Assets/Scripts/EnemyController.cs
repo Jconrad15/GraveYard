@@ -105,6 +105,7 @@ namespace GraveYard
             if (isPlaced == false)
             {
                 Debug.Log("Enemy passes");
+                Destroy(newCharacter);
             }
         }
 
