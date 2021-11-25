@@ -252,7 +252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 126b9356b4f22e440b32dc09e1207e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstaclePrefab: {fileID: 919132149155446097, guid: e15e09d1001c7394083ab8942da264c7, type: 3}
+  obstaclePrefab: {fileID: 4481772595423418853, guid: c42a4239bbff395458163fd1cc7a84c1, type: 3}
 --- !u!4 &263921160
 Transform:
   m_ObjectHideFlags: 0
@@ -735,7 +735,7 @@ MonoBehaviour:
   turnManager: {fileID: 1232541522}
   isPlayerTurn: 0
   mapGrid: {fileID: 1144662820}
-  characterPrefab: {fileID: 919132149155446097, guid: 0f2e85ff3f335fd42bd337b5b823b057, type: 3}
+  characterPrefab: {fileID: 4388646900056738288, guid: 0fe5207029d9bf6428c0d226ccd6cc1d, type: 3}
 --- !u!4 &1176362899
 Transform:
   m_ObjectHideFlags: 0
@@ -958,7 +958,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnManager: {fileID: 1232541522}
   mapGrid: {fileID: 1144662820}
-  enemyPrefab: {fileID: 919132149155446097, guid: cdff2a9703b83214e81b08620349b2dd, type: 3}
+  enemyPrefab: {fileID: 69729609135967783, guid: c0aedae51c2b9a941afcf062cae25270, type: 3}
 --- !u!4 &2091899317
 Transform:
   m_ObjectHideFlags: 0
