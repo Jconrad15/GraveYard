@@ -74,8 +74,13 @@ namespace GraveYard
             GameObject newCharacter = CreateCharacter();
 
             bool isPlaced = false;
+            int counter = 0;
+            int counterLimit = 1000;
             while (isPlaced == false)
             {
+                // Check limit
+                if (counter > counterLimit) { break; };
+
                 // Select a potential location
                 Cell selectedLocation = potentialLocations[Random.Range(0, potentialLocations.Count)];
 
@@ -85,22 +90,29 @@ namespace GraveYard
                 newCharacter.transform.position = characterPos;
 
                 // Try to place character
-                if(mapGrid.TryPlaceObject(newCharacter, ObjectType.Enemy))
+                if (mapGrid.TryPlaceObject(newCharacter, ObjectType.Enemy))
                 {
                     isPlaced = true;
 
                     // Add to placed locations
                     placedLocations.Add(selectedLocation);
                 }
+
+                counter += 1;
+            }
+
+            // Check is placed
+            if (isPlaced == false)
+            {
+                Debug.Log("Enemy passes");
             }
         }
 
         public void EndTurn()
         {
-            // This is called when the next turn button is pushed
             Debug.Log("End Enemy Turn.");
 
-            // Tell the battle controller to go to the next turn
+            // Tell the turn manager to go to the next turn
             turnManager.NextTurn();
         }
 

@@ -18,13 +18,13 @@ namespace GraveYard
         private TurnState state;
 
         // Start is called before the first frame update
-        void OnEnable()
+        private void OnEnable()
         {
             state = TurnState.SETUP;
             StartCoroutine(Setup());
         }
 
-        IEnumerator Setup()
+        private IEnumerator Setup()
         {
             // Do stuff for the setup
             Debug.Log("setup");
