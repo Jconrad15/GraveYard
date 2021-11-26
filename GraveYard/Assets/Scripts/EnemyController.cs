@@ -121,6 +121,7 @@ namespace GraveYard
         {
             GameObject newCharacter = Instantiate(enemyPrefab, this.transform);
             newCharacter.name = "newEnemy";
+            newCharacter.AddComponent<Zombie>();
 
             Vector3 position = new Vector3(0, 20f, 0);
             newCharacter.transform.position = position;
