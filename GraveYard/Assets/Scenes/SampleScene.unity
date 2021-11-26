@@ -252,7 +252,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 126b9356b4f22e440b32dc09e1207e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstaclePrefab: {fileID: 4481772595423418853, guid: c42a4239bbff395458163fd1cc7a84c1, type: 3}
+  rocksTallPrefab: {fileID: 4481772595423418853, guid: c42a4239bbff395458163fd1cc7a84c1, type: 3}
+  cryptPrefab: {fileID: 7959668670116837248, guid: 893e8db58dbc1fc49ab6151a371630d2, type: 3}
 --- !u!4 &263921160
 Transform:
   m_ObjectHideFlags: 0
