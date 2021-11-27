@@ -722,6 +722,8 @@ MonoBehaviour:
   ironFenceBorder: {fileID: 7713676682222155233, guid: 8dd65c933250f0b48ad21f3f09e058c3, type: 3}
   ironFenceBorderGate: {fileID: 4922906759408388273, guid: fb6cfb1ed74907745a1d4792bda09ee9, type: 3}
   ironFenceBorderCurve: {fileID: 889899895655161934, guid: ded3729efe5e70647ac0ce08cc5d2b1e, type: 3}
+  pine: {fileID: 6274573768022021438, guid: 2976771dcb54c474c94189474b9e4301, type: 3}
+  pineCrooked: {fileID: 5999146034202047955, guid: d21f7c945b5e6634d96a3ddca4869ea2, type: 3}
 --- !u!1 &1176362897
 GameObject:
   m_ObjectHideFlags: 0
