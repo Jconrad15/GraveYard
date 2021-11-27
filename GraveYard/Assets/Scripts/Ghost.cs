@@ -19,11 +19,11 @@ namespace GraveYard
             startPosition = transform.position;
 
             timeScale = Random.Range(3f, 5f);
-            floatDistance = Random.Range(0.05f, 0.15f);
+            floatDistance = Random.Range(0.1f, 0.15f);
             // Desired length of the ping-pong
             length = floatDistance * 2;
             // The low position of the ping-pong
-            bottomFloor = startPosition.y + floatDistance + transform.localScale.y;
+            bottomFloor = startPosition.y + floatDistance + (transform.localScale.y / 2f);
         }
 
         // Update is called once per frame
