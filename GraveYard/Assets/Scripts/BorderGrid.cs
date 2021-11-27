@@ -41,7 +41,7 @@ namespace GraveYard
 
             for (int x = 0; x < xSize; x++)
             {
-
+                // TODO: FIX and simplify gate code
                 // Check for gate
                 if (x == gate1.x)
                 {
@@ -60,27 +60,11 @@ namespace GraveYard
                     continue;
                 }
 
-                if (Random.value < treeChance)
-                {
-                    // Bottom z with tree
-                    CreateBorderSection(x, -1, ironFenceBorder, 0f, true);
-                }
-                else
-                {
-                    // Bottom z
-                    CreateBorderSection(x, -1, ironFenceBorder, 0f);
-                }
-
-                if (Random.value < treeChance)
-                {
-                    // Top z with tree
-                    CreateBorderSection(x, zSize, ironFenceBorder, 180f, true);
-                }
-                else
-                {
-                    // Top z
-                    CreateBorderSection(x, zSize, ironFenceBorder, 180f);
-                }
+                // Bottom z
+                CreateBorderSection(x, -1, ironFenceBorder, 0f);
+                
+                // Top z
+                CreateBorderSection(x, zSize, ironFenceBorder, 180f);
 
             }
 
@@ -104,25 +88,11 @@ namespace GraveYard
                     continue;
                 }
 
-                if (Random.value < treeChance)
-                {
-                    // Bottom x with tree
-                    CreateBorderSection(-1, z, ironFenceBorder, 90f, true);
-                }
-                else
-                {
-                    CreateBorderSection(-1, z, ironFenceBorder, 90f);
-                }
-                if (Random.value < treeChance)
-                {
-                    // Top x with tree
-                    CreateBorderSection(xSize, z, ironFenceBorder, -90f, true);
-                }
-                else
-                {
-                    // Top x
-                    CreateBorderSection(xSize, z, ironFenceBorder, -90f);
-                }
+                // Bottom x
+                CreateBorderSection(-1, z, ironFenceBorder, 90f);
+                
+                // Top x
+                CreateBorderSection(xSize, z, ironFenceBorder, -90f);
 
             }
 
@@ -135,7 +105,7 @@ namespace GraveYard
             yield return null;
         }
 
-        private void CreateBorderSection(int x, int z, GameObject fenceGO, float rotation = 0f, bool tree = false)
+        private void CreateBorderSection(int x, int z, GameObject fenceGO, float rotation = 0f)
         {
             // Create border cube
             GameObject borderCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -161,12 +131,13 @@ namespace GraveYard
             newFence.transform.rotation = Quaternion.Euler(fenceRotation);
 
             // Create tree
-            if (tree == false) { return; }
+            if (Random.value > treeChance) { return; }
             CreateTree(x, z, borderCube);
         }
 
         private void CreateTree(int x, int z, GameObject borderCube)
         {
+            // Choose random pine tree
             GameObject treePrefab = Random.value > 0.5f ? pine : pineCrooked;
 
             // Create tree decoration
@@ -174,6 +145,10 @@ namespace GraveYard
             Vector3 treePos = newTree.transform.position;
             treePos.y += borderCube.transform.localScale.y / 2f;
             newTree.transform.position = treePos;
+
+            // Random rotation
+            newTree.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+
         }
 
 
