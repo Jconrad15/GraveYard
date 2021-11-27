@@ -25,25 +25,76 @@ namespace GraveYard
             border = new GameObject("border");
             border.transform.parent = this.transform;
 
+            // Create one gate per side
+            Vector2 gate1 = new Vector2(Random.Range(0, xSize), -1);
+            Vector2 gate2 = new Vector2(Random.Range(0, xSize), zSize);
+
+            Vector2 gate3 = new Vector2(-1, Random.Range(0, zSize));
+            Vector2 gate4 = new Vector2(xSize, Random.Range(0, zSize));
+
+
             for (int x = 0; x < xSize; x++)
             {
+                // Check for gate
+                if (x == gate1.x)
+                {
+                    // Create gate
+                    CreateBorderSection(x, -1, ironFenceBorderGate, 0f);
+                    // Create symmetric section
+                    CreateBorderSection(x, zSize, ironFenceBorder, 180f);
+                    continue;
+                }
+                else if (x == gate2.x)
+                {
+                    // Create gate
+                    CreateBorderSection(x, zSize, ironFenceBorderGate, 180f);
+                    // Create symmetric section
+                    CreateBorderSection(x, -1, ironFenceBorder, 0f);
+                    continue;
+                }
+
                 // Bottom z
-                CreateBorderSection(x, -1, ironFenceBorder, 180f);
+                CreateBorderSection(x, -1, ironFenceBorder, 0f);
                 // Top z
-                CreateBorderSection(x, zSize, ironFenceBorder, 0f);
+                CreateBorderSection(x, zSize, ironFenceBorder, 180f);
             }
 
             for (int z = 0; z < zSize; z++)
             {
+                // Check for gate
+                if (z == gate3.y)
+                {
+                    // Create gate
+                    CreateBorderSection(-1, z, ironFenceBorderGate, 90f);
+                    // Create symmetric section
+                    CreateBorderSection(xSize, z, ironFenceBorder, -90f);
+                    continue;
+                }
+                else if (z == gate4.y)
+                {
+                    // Create gate
+                    CreateBorderSection(xSize, z, ironFenceBorderGate, -90f);
+                    // Create symmetric section
+                    CreateBorderSection(-1, z, ironFenceBorder, 90f);
+                    continue;
+                }
+
                 // Bottom x
-                CreateBorderSection(-1, z, ironFenceBorder, -90f);
+                CreateBorderSection(-1, z, ironFenceBorder, 90f);
                 // Top x
-                CreateBorderSection(xSize, z, ironFenceBorder, 90f);
+                CreateBorderSection(xSize, z, ironFenceBorder, -90f);
             }
+
+            // Create four corners
+            CreateBorderSection(-1, zSize, ironFenceBorderCurve, -90f);
+            CreateBorderSection(xSize, zSize, ironFenceBorderCurve, 0f);
+            CreateBorderSection(xSize, -1, ironFenceBorderCurve, 90f);
+            CreateBorderSection(-1 , -1, ironFenceBorderCurve, 180f);
+
             yield return null;
         }
 
-        private void CreateBorderSection(int x, int z, GameObject fenceGO, float rotation)
+        private void CreateBorderSection(int x, int z, GameObject fenceGO, float rotation = 0f)
         {
             // Create border cube
             GameObject borderCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -55,6 +106,8 @@ namespace GraveYard
 
             // remove collider
             Destroy(borderCube.GetComponent<Collider>());
+
+            if (fenceGO == null) { return; }
 
             // Create border decoration
             GameObject newFence = Instantiate(fenceGO, borderCube.transform);
