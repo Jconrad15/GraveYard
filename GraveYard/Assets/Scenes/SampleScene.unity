@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
+  m_IndirectSpecularColor: {r: 0.451401, g: 0.5008942, b: 0.5723129, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -488,13 +488,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
 --- !u!1 &898110281
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,7 +615,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7.5
+  orthographic size: 6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -724,6 +724,7 @@ MonoBehaviour:
   ironFenceBorderCurve: {fileID: 889899895655161934, guid: ded3729efe5e70647ac0ce08cc5d2b1e, type: 3}
   pine: {fileID: 6274573768022021438, guid: 2976771dcb54c474c94189474b9e4301, type: 3}
   pineCrooked: {fileID: 5999146034202047955, guid: d21f7c945b5e6634d96a3ddca4869ea2, type: 3}
+  pumpkinGroup: {fileID: 3143979612031438418, guid: 8f89ebb6a6342884584fea5b66ec391a, type: 3}
 --- !u!1 &1176362897
 GameObject:
   m_ObjectHideFlags: 0
