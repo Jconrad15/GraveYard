@@ -26,12 +26,22 @@ namespace GraveYard
         [SerializeField]
         private GameObject pineCrooked;
 
+        [SerializeField]
+        private GameObject pumpkinGroup;
+
         private float treeChance = 0.1f;
+        private float pumpkinGroupChance = 0.05f;
+
+        private int xSize;
+        private int zSize;
 
         public IEnumerator CreateBorder(int xSize, int zSize)
         {
             border = new GameObject("border");
             border.transform.parent = this.transform;
+
+            this.xSize = xSize;
+            this.zSize = zSize;
 
             // Create one gate per side
             Vector2 gate1 = new Vector2(Random.Range(0, xSize), -1);
@@ -130,25 +140,45 @@ namespace GraveYard
             fenceRotation.y = rotation;
             newFence.transform.rotation = Quaternion.Euler(fenceRotation);
 
-            // Create tree
-            if (Random.value > treeChance) { return; }
-            CreateTree(x, z, borderCube);
+            // No decor locations
+            if (fenceGO == ironFenceBorderCurve ||
+                fenceGO == ironFenceBorderGate) 
+            { 
+                return; 
+            }
+
+            // Check create tree
+            if (Random.value < treeChance) 
+            {
+                // Choose random pine tree                
+                GameObject placedTree =
+                    CreateDecoration(borderCube, Random.value > 0.5f ? pine : pineCrooked);
+
+                // Random rotation
+                placedTree.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+
+                return;
+            }
+
+            // Check create pumpkings
+            if (Random.value < pumpkinGroupChance)
+            {
+                GameObject pumpkin = CreateDecoration(borderCube, pumpkinGroup);
+                Vector3 lookAtPos = new Vector3(xSize / 2, pumpkin.transform.position.y, zSize / 2);
+                pumpkin.transform.LookAt(lookAtPos);
+            }
+            
         }
 
-        private void CreateTree(int x, int z, GameObject borderCube)
+        private GameObject CreateDecoration(GameObject borderCube, GameObject prefab)
         {
-            // Choose random pine tree
-            GameObject treePrefab = Random.value > 0.5f ? pine : pineCrooked;
+            // Create decoration
+            GameObject decoration = Instantiate(prefab, borderCube.transform);
+            Vector3 decorationPos = decoration.transform.position;
+            decorationPos.y += borderCube.transform.localScale.y / 2f;
+            decoration.transform.position = decorationPos;
 
-            // Create tree decoration
-            GameObject newTree = Instantiate(treePrefab, borderCube.transform);
-            Vector3 treePos = newTree.transform.position;
-            treePos.y += borderCube.transform.localScale.y / 2f;
-            newTree.transform.position = treePos;
-
-            // Random rotation
-            newTree.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
-
+            return decoration;
         }
 
 
