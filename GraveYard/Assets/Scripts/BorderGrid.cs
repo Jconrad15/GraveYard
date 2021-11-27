@@ -29,8 +29,12 @@ namespace GraveYard
         [SerializeField]
         private GameObject pumpkinGroup;
 
+        [SerializeField]
+        private GameObject debrisCollection;
+
         private float treeChance = 0.1f;
         private float pumpkinGroupChance = 0.05f;
+        private float debrisCollectionChance = 0.05f;
 
         private int xSize;
         private int zSize;
@@ -166,6 +170,19 @@ namespace GraveYard
                 GameObject pumpkin = CreateDecoration(borderCube, pumpkinGroup);
                 Vector3 lookAtPos = new Vector3(xSize / 2, pumpkin.transform.position.y, zSize / 2);
                 pumpkin.transform.LookAt(lookAtPos);
+                return;
+            }
+
+            // Check create debris collection
+            if (Random.value < debrisCollectionChance)
+            {
+                GameObject debris = CreateDecoration(borderCube, debrisCollection);
+                // Random rotation
+                debris.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+
+                // only create one, so set chance to zero
+                debrisCollectionChance = 0f;
+                return;
             }
             
         }

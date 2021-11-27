@@ -725,6 +725,7 @@ MonoBehaviour:
   pine: {fileID: 6274573768022021438, guid: 2976771dcb54c474c94189474b9e4301, type: 3}
   pineCrooked: {fileID: 5999146034202047955, guid: d21f7c945b5e6634d96a3ddca4869ea2, type: 3}
   pumpkinGroup: {fileID: 3143979612031438418, guid: 8f89ebb6a6342884584fea5b66ec391a, type: 3}
+  debrisCollection: {fileID: 6571762306729985495, guid: fd57781229b02a64a96e43e184ad4e96, type: 3}
 --- !u!1 &1176362897
 GameObject:
   m_ObjectHideFlags: 0
