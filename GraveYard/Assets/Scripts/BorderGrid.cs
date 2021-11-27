@@ -11,38 +11,61 @@ namespace GraveYard
         [SerializeField]
         private Material borderMaterial;
 
+        [SerializeField]
+        private GameObject ironFenceBorder;
+
+        [SerializeField]
+        private GameObject ironFenceBorderGate;
+
+        [SerializeField]
+        private GameObject ironFenceBorderCurve;
+
         public IEnumerator CreateBorder(int xSize, int zSize)
         {
             border = new GameObject("border");
             border.transform.parent = this.transform;
 
-            for (int x = -1; x < xSize + 1; x++)
+            for (int x = 0; x < xSize; x++)
             {
                 // Bottom z
-                CreateBorderCube(x, -1);
+                CreateBorderSection(x, -1, ironFenceBorder, 180f);
                 // Top z
-                CreateBorderCube(x, zSize);
+                CreateBorderSection(x, zSize, ironFenceBorder, 0f);
             }
 
             for (int z = 0; z < zSize; z++)
             {
                 // Bottom x
-                CreateBorderCube(-1, z);
+                CreateBorderSection(-1, z, ironFenceBorder, -90f);
                 // Top x
-                CreateBorderCube(xSize, z);
+                CreateBorderSection(xSize, z, ironFenceBorder, 90f);
             }
             yield return null;
         }
 
-        private void CreateBorderCube(int x, int z)
+        private void CreateBorderSection(int x, int z, GameObject fenceGO, float rotation)
         {
+            // Create border cube
             GameObject borderCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             borderCube.transform.parent = border.transform;
             borderCube.transform.position = new Vector3(x, 0, z);
 
             borderCube.name = "Border " + x.ToString() + ", " + z.ToString();
-
             borderCube.GetComponent<MeshRenderer>().material = borderMaterial;
+
+            // remove collider
+            Destroy(borderCube.GetComponent<Collider>());
+
+            // Create border decoration
+            GameObject newFence = Instantiate(fenceGO, borderCube.transform);
+            Vector3 fencePos = newFence.transform.position;
+            fencePos.y += borderCube.transform.localScale.y / 2f;
+            newFence.transform.position = fencePos;
+
+            Vector3 fenceRotation = newFence.transform.rotation.eulerAngles;
+            fenceRotation.y = rotation;
+            newFence.transform.rotation = Quaternion.Euler(fenceRotation);
+
         }
     }
 }

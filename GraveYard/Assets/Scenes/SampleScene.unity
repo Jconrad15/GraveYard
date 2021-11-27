@@ -719,6 +719,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   borderMaterial: {fileID: 2100000, guid: d042432b8626ee24792a3aa0be437cae, type: 2}
+  ironFenceBorder: {fileID: 0}
+  ironFenceBorderGate: {fileID: 0}
+  ironFenceBorderCurve: {fileID: 0}
 --- !u!1 &1176362897
 GameObject:
   m_ObjectHideFlags: 0
