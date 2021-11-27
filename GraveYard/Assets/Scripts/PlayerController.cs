@@ -17,7 +17,7 @@ namespace GraveYard
         [SerializeField]
         private GameObject characterPrefab;
 
-        public readonly float heightOffset = 1f;
+        public readonly float heightOffset = 0.6f;
 
         // Start is called before the first frame update
         private void Start()

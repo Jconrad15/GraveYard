@@ -687,6 +687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellMaterial: {fileID: 2100000, guid: 4c899c687095c8241a105c204a9ef9b5, type: 2}
+  borderMaterial: {fileID: 2100000, guid: d042432b8626ee24792a3aa0be437cae, type: 2}
   playerController: {fileID: 1176362898}
   enemyController: {fileID: 2091899316}
   obstacleManager: {fileID: 263921159}
