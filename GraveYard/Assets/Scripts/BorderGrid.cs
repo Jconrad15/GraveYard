@@ -34,7 +34,7 @@ namespace GraveYard
 
         private float treeChance = 0.1f;
         private float pumpkinGroupChance = 0.05f;
-        private float debrisCollectionChance = 0.05f;
+        private float debrisCollectionChance = 0.1f;
 
         private int xSize;
         private int zSize;
