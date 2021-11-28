@@ -56,6 +56,16 @@ namespace GraveYard
             PlaceAtCell(GetCell(obstacleStartX, obstacleStartZ),
                         obstacle,
                         ObjectType.Obstacle);
+
+            // Create second obstacle
+            obstacleStartX = 4;
+            obstacleStartZ = 4;
+
+            obstacle = obstacleManager.CreateObstacle(obstacleStartX, obstacleStartZ);
+
+            PlaceAtCell(GetCell(obstacleStartX, obstacleStartZ),
+                        obstacle,
+                        ObjectType.Obstacle);
         }
 
         private void CreatePlayerStartCharacter()
