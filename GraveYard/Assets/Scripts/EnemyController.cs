@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,28 +48,7 @@ namespace GraveYard
         private void PlaceCharacter()
         {
             // Get available locations
-            List<Cell> potentialLocations = new List<Cell>();
-            // For each placed location
-            for (int i = 0; i < placedLocations.Count; i++)
-            {
-                // For each direction
-                for (int j = 0; j < 4; j++)
-                {
-                    Cell neighbor = mapGrid.GetNeighbor(placedLocations[i], (Direction)j);
-                    
-                    // Add neighbor cell to potential list if
-                    // not null
-                    // not already in list
-                    // isOpen
-                    if (neighbor != null)
-                    {
-                        if (potentialLocations.Contains(neighbor) == false && neighbor.IsOpen)
-                        {
-                            potentialLocations.Add(neighbor);
-                        }
-                    }
-                }
-            }
+            List<Cell> potentialLocations = GetPotentialLocations();
 
             // Create new character instance
             GameObject newCharacter = CreateCharacter();
@@ -82,8 +62,8 @@ namespace GraveYard
                 if (counter > counterLimit) { break; };
 
                 // Select a potential location
-                Cell selectedLocation = potentialLocations[Random.Range(0, potentialLocations.Count)];
-
+                Cell selectedLocation = SelectLocationCell(potentialLocations);
+                
                 // Set character info
                 Vector3 characterPos = selectedLocation.position;
                 characterPos.y += heightOffset;
@@ -107,6 +87,83 @@ namespace GraveYard
                 Debug.Log("Enemy passes");
                 Destroy(newCharacter);
             }
+        }
+
+        private List<Cell> GetPotentialLocations()
+        {
+            List<Cell> potentialLocations = new List<Cell>();
+            // For each placed location
+            for (int i = 0; i < placedLocations.Count; i++)
+            {
+                // For each direction
+                for (int j = 0; j < 4; j++)
+                {
+                    Cell neighbor = mapGrid.GetNeighbor(placedLocations[i], (Direction)j);
+
+                    // Add neighbor cell to potential list if
+                    // not null
+                    // not already in list
+                    // isOpen
+                    if (neighbor != null)
+                    {
+                        if (potentialLocations.Contains(neighbor) == false && neighbor.IsOpen)
+                        {
+                            potentialLocations.Add(neighbor);
+                        }
+                    }
+                }
+            }
+            return potentialLocations;
+        }
+
+        /// <summary>
+        /// Returns a selected cell to place a character.
+        /// </summary>
+        /// <param name="potentialLocations"></param>
+        /// <returns></returns>
+        private Cell SelectLocationCell(List<Cell> potentialLocations)
+        {
+            float[] weights = new float[potentialLocations.Count];
+            List<Vector3> humanLocations = mapGrid.GetHumanLocations();
+
+            for (int i = 0; i < potentialLocations.Count; i++)
+            {
+                // Initial weight of each cell to zero
+                weights[i] = 0;
+
+                float distance = GetNearestHumanCellDistance(
+                    potentialLocations[i].position,
+                    humanLocations);
+
+                weights[i] -= distance;
+            }
+
+            // Select location with largest weight
+            float maxWeight = weights.Max();
+            int maxIndex = weights.ToList().IndexOf(maxWeight);
+            return potentialLocations[maxIndex];
+        }
+
+        /// <summary>
+        /// Returns the smallest distance to a human placed location.
+        /// </summary>
+        /// <param name="potentialLocation"></param>
+        /// <param name="humanLocations"></param>
+        /// <returns></returns>
+        private float GetNearestHumanCellDistance(Vector3 potentialLocation, List<Vector3> humanLocations)
+        {
+            float distance = float.MaxValue;
+            for (int i = 0; i < humanLocations.Count; i++)
+            {
+                float d = Vector3.Distance(humanLocations[i], potentialLocation);
+
+                if (d < distance)
+                {
+                    distance = d;
+                }
+            }
+
+            return distance;
         }
 
         public void EndTurn()

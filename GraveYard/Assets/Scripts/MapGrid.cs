@@ -223,5 +223,22 @@ namespace GraveYard
             return false;
         }
 
+        /// <summary>
+        /// Returns a list of vector3 where human characters are placed.
+        /// </summary>
+        /// <returns></returns>
+        public List<Vector3> GetHumanLocations()
+        {
+            List<Vector3> humanLocations = new List<Vector3>();
+            for (int i = 0; i < cells.Length; i++)
+            {
+                if (cells[i].objectType == ObjectType.Player)
+                {
+                    humanLocations.Add(cells[i].position);
+                }
+            }
+
+            return humanLocations;
+        }
     }
 }
