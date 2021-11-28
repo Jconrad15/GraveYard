@@ -50,6 +50,12 @@ namespace GraveYard
             // Get available locations
             List<Cell> potentialLocations = GetPotentialLocations();
 
+            if (potentialLocations.Count == 0)
+            {
+                Debug.Log("Enemy passes");
+                return;
+            }
+
             // Create new character instance
             GameObject newCharacter = CreateCharacter();
 
@@ -84,7 +90,7 @@ namespace GraveYard
             // Check is placed
             if (isPlaced == false)
             {
-                Debug.Log("Enemy passes");
+                Debug.Log("Enemy passes second try.");
                 Destroy(newCharacter);
             }
         }
