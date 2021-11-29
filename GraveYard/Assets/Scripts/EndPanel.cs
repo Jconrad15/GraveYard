@@ -30,7 +30,6 @@ namespace GraveYard
             {
                 gameObject.GetComponent<Image>().color = loseColor;
                 text.SetText("Defeat");
-
             }
 
         }
