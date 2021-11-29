@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace GraveYard
 {
@@ -32,6 +31,11 @@ namespace GraveYard
                 text.SetText("Defeat");
             }
 
+        }
+
+        public void ReturnStartMenu()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
 
 
