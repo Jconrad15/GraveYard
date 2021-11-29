@@ -6,6 +6,19 @@ namespace GraveYard
 {
     public enum Direction { N, E, S, W };
 
+    public struct MapData
+    {
+        public MapData(int totalCells, int obstacleCells)
+        {
+            this.totalCells = totalCells;
+            this.obstacleCells = obstacleCells;
+            this.controllableCells = totalCells - obstacleCells;
+        }
+        public int totalCells;
+        public int controllableCells;
+        public int obstacleCells;
+    }
+
     public class MapGrid : MonoBehaviour
     {
         private int xSize = 10;
@@ -29,7 +42,7 @@ namespace GraveYard
         [SerializeField]
         private BorderGrid borderGrid;
 
-        public void InitializeGrid()
+        public MapData InitializeGrid()
         {
             GenerateMap();
             DisplayMap();
@@ -43,10 +56,12 @@ namespace GraveYard
             CreateEnemyStartCharacter();
 
             // Create obstacles
-            CreateObstacles();
+            int obstacleCount = CreateObstacles();
+
+            return new MapData(xSize * zSize, obstacleCount);
         }
 
-        private void CreateObstacles()
+        private int CreateObstacles()
         {
             int obstacleStartX = 5;
             int obstacleStartZ = 5;
@@ -66,6 +81,8 @@ namespace GraveYard
             PlaceAtCell(GetCell(obstacleStartX, obstacleStartZ),
                         obstacle,
                         ObjectType.Obstacle);
+
+            return 2;
         }
 
         private void CreatePlayerStartCharacter()
@@ -249,6 +266,20 @@ namespace GraveYard
             }
 
             return humanLocations;
+        }
+
+        public int GetObjectCount(ObjectType objectType)
+        {
+            int count = 0;
+            for (int i = 0; i < cells.Length; i++)
+            {
+                if (cells[i].objectType == objectType)
+                {
+                    count += 1;
+                }
+            }
+
+            return count;
         }
     }
 }

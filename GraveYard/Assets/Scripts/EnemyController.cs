@@ -37,15 +37,15 @@ namespace GraveYard
             Debug.Log("Enemy turn");
 
             // Determine where to place new character
-            PlaceCharacter();
+            bool isPlaced = PlaceCharacter();
             
-            EndTurn();
+            EndTurn(!isPlaced);
         }
 
         /// <summary>
-        /// Determines a location to place a new character
+        /// Determines a location to place a new character, returns true if placed.
         /// </summary>
-        private void PlaceCharacter()
+        private bool PlaceCharacter()
         {
             // Get available locations
             List<Cell> potentialLocations = GetPotentialLocations();
@@ -53,7 +53,7 @@ namespace GraveYard
             if (potentialLocations.Count == 0)
             {
                 Debug.Log("Enemy passes");
-                return;
+                return false;
             }
 
             // Create new character instance
@@ -92,7 +92,9 @@ namespace GraveYard
             {
                 Debug.Log("Enemy passes second try.");
                 Destroy(newCharacter);
+                return false;
             }
+            return true;
         }
 
         private List<Cell> GetPotentialLocations()
@@ -172,12 +174,12 @@ namespace GraveYard
             return distance;
         }
 
-        public void EndTurn()
+        public void EndTurn(bool passed)
         {
             Debug.Log("End Enemy Turn.");
 
             // Tell the turn manager to go to the next turn
-            turnManager.NextTurn();
+            turnManager.NextTurn(passed);
         }
 
         public GameObject CreateCharacter()

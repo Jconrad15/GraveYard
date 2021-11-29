@@ -19,6 +19,10 @@ namespace GraveYard
 
         public readonly float heightOffset = 0.6f;
 
+        private GameObject newCharacter;
+
+        private bool isPlaced;
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -45,9 +49,9 @@ namespace GraveYard
         private IEnumerator LocationSelection()
         {
             // Get new character instance
-            GameObject newCharacter = CreateCharacter();
+            newCharacter = CreateCharacter();
 
-            bool isPlaced = false;
+            isPlaced = false;
             while (isPlaced == false)
             {
                 // Determine mouse location
@@ -64,7 +68,7 @@ namespace GraveYard
                 }
 
                 // Try to place character when click
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(1))
                 {
                     if (mapGrid.TryPlaceObject(newCharacter, ObjectType.Player))
                     {
@@ -80,6 +84,7 @@ namespace GraveYard
                 yield return null;
             }
 
+            Debug.Log("End while");
             // Automate turn end here
             //EndTurnSelected();
         }
@@ -103,9 +108,38 @@ namespace GraveYard
                 // This is called when the next turn button is pushed
                 Debug.Log("End Turn Selected.");
                 isPlayerTurn = false;
+                StopAllCoroutines();
+
+                if (isPlaced == false)
+                {
+                    Destroy(newCharacter);
+                }
 
                 // Tell the battle controller to go to the next turn
                 turnManager.NextTurn();
+            }
+            else
+            {
+                Debug.Log("It is not the player's turn.");
+            }
+        }
+
+        public void PassTurn()
+        {
+            if (isPlayerTurn)
+            {
+                // This is called when the next turn button is pushed
+                Debug.Log("Pass Turn Selected.");
+                isPlayerTurn = false;
+                StopAllCoroutines();
+
+                if (isPlaced == false)
+                {
+                    Destroy(newCharacter);
+                }
+
+                // Tell the battle controller to go to the next turn
+                turnManager.NextTurn(true);
             }
             else
             {

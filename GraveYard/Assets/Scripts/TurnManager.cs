@@ -17,6 +17,10 @@ namespace GraveYard
 
         private TurnState state;
 
+        private int passCount = 0;
+
+        private MapData md;
+
         // Start is called before the first frame update
         private void OnEnable()
         {
@@ -28,7 +32,7 @@ namespace GraveYard
         {
             // Do stuff for the setup
             Debug.Log("setup");
-            mapGrid.InitializeGrid();
+            md = mapGrid.InitializeGrid();
 
             yield return new WaitForSeconds(1f);
 
@@ -57,7 +61,51 @@ namespace GraveYard
             OnEnemyTurn?.Invoke(this, EventArgs.Empty);
         }
 
-        private void EndBattle(bool playerWin, bool enemyWin)
+        public void NextTurn(bool pass = false)
+        {
+            if (pass) { passCount += 1; }
+
+            bool mustEnd = false;
+            // If multiple passes
+            if (passCount >= 2)
+            {
+                mustEnd = true;
+            }
+
+            Debug.Log("Next turn is triggered");
+
+            // Determine if winner
+            if (CheckPlayerWin(mustEnd))
+            {
+                EndBattle();
+            }
+            else if (CheckEnemyWin(mustEnd))
+            {
+                EndBattle();
+            }
+            else
+            {
+                // Next turn
+                if (state == TurnState.PLAYERTURN)
+                {
+                    StartEnemyTurn();
+                }
+                else if (state == TurnState.ENEMYTURN)
+                {
+                    // Enemy just went, reset pass count
+                    passCount = 0;
+
+                    StartPlayerTurn();
+                }
+                else
+                {
+                    Debug.LogError("Something bad happened with the turn order.");
+                    StartPlayerTurn();
+                }
+            }
+        }
+
+        private void EndBattle()
         {
             if (state == TurnState.WON)
             {
@@ -67,31 +115,69 @@ namespace GraveYard
             {
                 Debug.Log("You were defeated.");
             }
+            else
+            {
+                Debug.LogError("How did we get to endbattle when no one won?");
+                // Just set to win
+                state = TurnState.WON;
+                EndBattle();
+            }
         }
 
-        public void NextTurn(bool playerWin = false, bool enemyWin = false)
+        private bool CheckPlayerWin(bool mustEnd)
         {
-            Debug.Log("Next turn is triggered");
+            int playerCount = mapGrid.GetObjectCount(ObjectType.Player);
+            int enemyCount = mapGrid.GetObjectCount(ObjectType.Enemy);
 
-            if (playerWin == true || enemyWin == true)
+            if (mustEnd)
             {
-                EndBattle(playerWin, enemyWin);  // Need to tell EndBattle if win or lose
+                if (playerCount > enemyCount)
+                {
+                    // Player wins
+                    state = TurnState.WON;
+                    return true;
+                }
             }
             else
             {
-                if (state == TurnState.PLAYERTURN)
+                // If player has half of controllable tiles
+                if (playerCount >= md.controllableCells / 2f)
                 {
-                    StartEnemyTurn();
-                }
-                else if (state == TurnState.ENEMYTURN)
-                {
-                    StartPlayerTurn();
-                }
-                else
-                {
-                    Debug.LogError("Something bad happened with the turn order.");
+                    // Player wins
+                    state = TurnState.WON;
+                    return true;
                 }
             }
+
+            return false;
+        }
+
+        private bool CheckEnemyWin(bool mustEnd)
+        {
+            int playerCount = mapGrid.GetObjectCount(ObjectType.Player);
+            int enemyCount = mapGrid.GetObjectCount(ObjectType.Enemy);
+
+            if (mustEnd)
+            {
+                if (enemyCount > playerCount)
+                {
+                    // Enemy wins
+                    state = TurnState.LOST;
+                    return true;
+                }
+            }
+            else
+            {
+                // If Enemy has half of controllable tiles
+                if (enemyCount >= md.controllableCells / 2f)
+                {
+                    // Enemy wins
+                    state = TurnState.LOST;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
