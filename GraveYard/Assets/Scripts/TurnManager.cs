@@ -12,6 +12,9 @@ namespace GraveYard
         [SerializeField]
         private MapGrid mapGrid;
 
+        [SerializeField]
+        private EndPanel endPanel;
+
         public event EventHandler OnPlayerTurn;
         public event EventHandler OnEnemyTurn;
 
@@ -110,10 +113,12 @@ namespace GraveYard
             if (state == TurnState.WON)
             {
                 Debug.Log("You won the battle!");
+                endPanel.Display(true);
             }
             else if (state == TurnState.LOST)
             {
                 Debug.Log("You were defeated.");
+                endPanel.Display(false);
             }
             else
             {
