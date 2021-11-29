@@ -190,7 +190,7 @@ namespace GraveYard
         private Cell GetCell(int x, int z)
         {
             // Check out of bounds
-            if (x > xSize || x < 0 || z > zSize || z < 0) { return null; }
+            if (x > xSize - 1 || x < 0 || z > zSize - 1 || z < 0) { return null; }
 
             int index = (x * zSize) + z;
 

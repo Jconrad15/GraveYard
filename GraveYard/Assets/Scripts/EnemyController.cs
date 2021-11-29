@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace GraveYard
 {
@@ -146,9 +148,20 @@ namespace GraveYard
                 weights[i] -= distance;
             }
 
-            // Select location with largest weight
-            float maxWeight = weights.Max();
-            int maxIndex = weights.ToList().IndexOf(maxWeight);
+            // Select location with first or second largest weight
+            float weight;
+            if (Random.value < 0.9)
+            {
+                weight = weights.Max();
+            }
+            else
+            {
+                float[] arr = weights.ToArray();
+                Array.Sort(arr);
+                weight = arr[arr.Length - 2];
+            }
+
+            int maxIndex = weights.ToList().IndexOf(weight);
             return potentialLocations[maxIndex];
         }
 
