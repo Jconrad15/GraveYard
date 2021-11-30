@@ -1147,6 +1147,7 @@ GameObject:
   - component: {fileID: 1144662821}
   - component: {fileID: 1144662820}
   - component: {fileID: 1144662822}
+  - component: {fileID: 1144662823}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -1169,8 +1170,10 @@ MonoBehaviour:
   cellMaterial: {fileID: 2100000, guid: 4c899c687095c8241a105c204a9ef9b5, type: 2}
   playerController: {fileID: 1176362898}
   enemyController: {fileID: 2091899316}
+  neutralController: {fileID: 1772783014}
   obstacleManager: {fileID: 263921159}
   borderGrid: {fileID: 1144662822}
+  pathGrid: {fileID: 1144662823}
 --- !u!4 &1144662821
 Transform:
   m_ObjectHideFlags: 0
@@ -1205,6 +1208,19 @@ MonoBehaviour:
   pineCrooked: {fileID: 5999146034202047955, guid: d21f7c945b5e6634d96a3ddca4869ea2, type: 3}
   pumpkinGroup: {fileID: 3143979612031438418, guid: 8f89ebb6a6342884584fea5b66ec391a, type: 3}
   debrisCollection: {fileID: 6571762306729985495, guid: fd57781229b02a64a96e43e184ad4e96, type: 3}
+--- !u!114 &1144662823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144662819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05d33fab1daa040409a3fdf17986ec64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathPrefab: {fileID: 6068076764369433342, guid: 5328a56d0b071724fae08a19f0d8a622, type: 3}
 --- !u!1 &1176362897
 GameObject:
   m_ObjectHideFlags: 0
@@ -1461,6 +1477,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnManager: {fileID: 1232541522}
   mapGrid: {fileID: 1144662820}
+  neutralPrefab: {fileID: 4711610357876351534, guid: 85bdff81f0a90ed479d41d47487eaa69, type: 3}
+  placedNeutrals: []
 --- !u!4 &1772783015
 Transform:
   m_ObjectHideFlags: 0

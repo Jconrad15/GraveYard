@@ -15,7 +15,7 @@ namespace GraveYard
         [SerializeField]
         private GameObject neutralPrefab;
 
-        public List<Cell> placedLocations = new List<Cell>();
+        public List<NeutralEntity> placedNeutrals = new List<NeutralEntity>();
 
         public readonly float heightOffset = 0.5f;
 
@@ -44,7 +44,11 @@ namespace GraveYard
         {
             // For each neutral character
             // TODO: Create struct/class for the neutral characters to
-            // remember a path of cells on which the character moves.  
+            // remember a path of cells on which the character moves.
+            for (int i = 0; i < placedNeutrals.Count; i++)
+            {
+
+            }
         }
 
         private void EndTurn()
@@ -55,14 +59,20 @@ namespace GraveYard
             turnManager.NextTurn();
         }
 
-        public GameObject CreateCharacter()
+        public GameObject CreateCharacter(int x, int z, Cell[] path)
         {
             GameObject newCharacter = Instantiate(neutralPrefab, this.transform);
             newCharacter.name = "newNeutral";
-            //newCharacter.AddComponent<Zombie>();
 
-            Vector3 position = new Vector3(0, 20f, 0);
-            newCharacter.transform.position = position;
+            NeutralEntity ne = newCharacter.AddComponent<NeutralEntity>();
+            placedNeutrals.Add(ne);
+            ne.Initialize(x, z, path);
+
+            Vector3 neutralPos = newCharacter.transform.position;
+            neutralPos.x = x;
+            neutralPos.y = heightOffset;
+            neutralPos.z = z;
+            newCharacter.transform.position = neutralPos;
 
             return newCharacter;
         }

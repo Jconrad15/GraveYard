@@ -47,6 +47,9 @@ namespace GraveYard
         [SerializeField]
         private BorderGrid borderGrid;
 
+        [SerializeField]
+        private PathGrid pathGrid;
+
         public MapData InitializeGrid()
         {
             GenerateMap();
@@ -64,7 +67,7 @@ namespace GraveYard
             int obstacleCount = CreateObstacles();
 
             // Create neutral charcter starting locations and paths
-            int neutralCharacterCount = CreateNeutral();
+            int neutralCharacterCount = CreateNeutral(6, 1);
 
             return new MapData(xSize * zSize, obstacleCount, neutralCharacterCount);
         }
@@ -131,26 +134,66 @@ namespace GraveYard
             enemyController.placedLocations.Add(cell);
         }
 
-        private int CreateNeutral()
+        private int CreateNeutral(int x, int z)
         {
-            int neutralStartX = 1;
-            int neutralStartZ = zSize / 2;
+            Cell[] path = CreateNeutralPath(x, z);
 
-            GameObject neutral = neutralController.CreateCharacter();
-
-            Vector3 neutralPos = neutral.transform.position;
-            neutralPos.x = neutralStartX;
-            neutralPos.y = neutralController.heightOffset;
-            neutralPos.z = neutralStartZ;
-            neutral.transform.position = neutralPos;
-
-            Cell cell = GetCell(neutralStartX, neutralStartZ);
-            PlaceAtCell(cell, neutral, ObjectType.Neutral);
-
-            // Also add neutral location to neutral controller
-            neutralController.placedLocations.Add(cell);
+            PlaceAtCell(
+                GetCell(x, z),
+                neutralController.CreateCharacter(x, z, path),
+                ObjectType.Neutral);
 
             return 1;
+        }
+
+        private Cell[] CreateNeutralPath(int x, int z)
+        {
+            Cell currentCell = GetCell(x, z);
+
+            int distance = 10;
+            List<Cell> path = new List<Cell>();
+
+            path.Add(currentCell);
+            pathGrid.AddPath(currentCell.position);
+
+            Direction prevDirection = Direction.S;
+            Direction direction;
+            for (int i = 1; i < distance; i++)
+            {
+                int abortCounter = 0;
+                bool isCellSelected = false;
+                while (isCellSelected == false)
+                {
+                    direction = Utility.GetRandomEnum<Direction>();
+                    while (direction == prevDirection)
+                    {
+                        direction = Utility.GetRandomEnum<Direction>();
+                    }
+
+                    Cell neighbor = GetNeighbor(currentCell, direction);
+
+                    if (neighbor != null)
+                    {
+                        if (path.Contains(neighbor) == false &&
+                            neighbor.IsOpen)
+                        {
+                            path.Add(neighbor);
+
+                            pathGrid.AddPath(neighbor.position);
+                            isCellSelected = true;
+
+                            prevDirection = direction;
+                            currentCell = neighbor;
+                        }
+                    }
+
+                    abortCounter += 1;
+                    if (abortCounter > 1000)
+                    { Debug.LogWarning("abort"); break; }
+                }
+            }
+
+            return path.ToArray();
         }
 
         private void GenerateMap()
