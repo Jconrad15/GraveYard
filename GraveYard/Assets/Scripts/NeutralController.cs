@@ -15,6 +15,8 @@ namespace GraveYard
         [SerializeField]
         private GameObject neutralPrefab;
 
+        public List<Cell> placedLocations = new List<Cell>();
+
         public readonly float heightOffset = 0.5f;
 
         // Start is called before the first frame update
@@ -33,8 +35,16 @@ namespace GraveYard
             Debug.Log("It is neutral's turn");
 
             // Do something
+            MoveCharacters();
 
             EndTurn();
+        }
+
+        private void MoveCharacters()
+        {
+            // For each neutral character
+            // TODO: Create struct/class for the neutral characters to
+            // remember a path of cells on which the character moves.  
         }
 
         private void EndTurn()

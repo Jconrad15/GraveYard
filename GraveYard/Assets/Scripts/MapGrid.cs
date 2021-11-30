@@ -147,6 +147,9 @@ namespace GraveYard
             Cell cell = GetCell(neutralStartX, neutralStartZ);
             PlaceAtCell(cell, neutral, ObjectType.Neutral);
 
+            // Also add neutral location to neutral controller
+            neutralController.placedLocations.Add(cell);
+
             return 1;
         }
 
