@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GraveYard
 {
-    public enum TurnState { SETUP, PLAYERTURN, ENEMYTURN, WON, LOST };
+    public enum TurnState { SETUP, PLAYERTURN, ENEMYTURN, WON, LOST, NEUTRALTURN };
 
     public class TurnManager : MonoBehaviour
     {
@@ -17,6 +17,7 @@ namespace GraveYard
 
         public event EventHandler OnPlayerTurn;
         public event EventHandler OnEnemyTurn;
+        public event EventHandler OnNeutralTurn;
 
         private TurnState state;
 
@@ -37,7 +38,7 @@ namespace GraveYard
             Debug.Log("setup");
             md = mapGrid.InitializeGrid();
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
 
             // Code to determine who goes first.  For now, player goes first
 
@@ -62,6 +63,17 @@ namespace GraveYard
 
             state = TurnState.ENEMYTURN;
             OnEnemyTurn?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void StartNeutralTurn()
+        {
+            // Neutral units perform their turn
+            // Raise event that states that is is neutrals turn
+
+            Debug.Log("Raise Neutral turn event");
+
+            state = TurnState.NEUTRALTURN;
+            OnNeutralTurn?.Invoke(this, EventArgs.Empty);
         }
 
         public void NextTurn(bool pass = false)
@@ -95,7 +107,11 @@ namespace GraveYard
                 }
                 else if (state == TurnState.ENEMYTURN)
                 {
-                    // Enemy just went, reset pass count
+                    StartNeutralTurn();
+                }
+                else if (state == TurnState.NEUTRALTURN)
+                {
+                    // Neutral turn just went, reset pass count
                     passCount = 0;
 
                     StartPlayerTurn();

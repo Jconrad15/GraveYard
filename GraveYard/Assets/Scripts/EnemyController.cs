@@ -187,7 +187,7 @@ namespace GraveYard
             return distance;
         }
 
-        public void EndTurn(bool passed)
+        private void EndTurn(bool passed)
         {
             Debug.Log("End Enemy Turn.");
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GraveYard
 {
-    public enum ObjectType { Player, Enemy, Obstacle, Empty};
+    public enum ObjectType { Player, Enemy, Obstacle, Empty, Neutral};
 
     public class Cell
     {

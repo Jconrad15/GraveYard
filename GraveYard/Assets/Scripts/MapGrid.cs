@@ -8,15 +8,17 @@ namespace GraveYard
 
     public struct MapData
     {
-        public MapData(int totalCells, int obstacleCells)
+        public MapData(int totalCells, int obstacleCells, int neutralCharacterCount)
         {
             this.totalCells = totalCells;
             this.obstacleCells = obstacleCells;
             this.controllableCells = totalCells - obstacleCells;
+            this.neutralCharacterCount = neutralCharacterCount;
         }
         public int totalCells;
         public int controllableCells;
         public int obstacleCells;
+        public int neutralCharacterCount;
     }
 
     public class MapGrid : MonoBehaviour
@@ -35,6 +37,9 @@ namespace GraveYard
 
         [SerializeField]
         private EnemyController enemyController;
+
+        [SerializeField]
+        private NeutralController neutralController;
 
         [SerializeField]
         private ObstacleManager obstacleManager;
@@ -58,7 +63,10 @@ namespace GraveYard
             // Create obstacles
             int obstacleCount = CreateObstacles();
 
-            return new MapData(xSize * zSize, obstacleCount);
+            // Create neutral charcter starting locations and paths
+            int neutralCharacterCount = CreateNeutral();
+
+            return new MapData(xSize * zSize, obstacleCount, neutralCharacterCount);
         }
 
         private int CreateObstacles()
@@ -121,6 +129,25 @@ namespace GraveYard
 
             // Also add enemy location to enemy controller
             enemyController.placedLocations.Add(cell);
+        }
+
+        private int CreateNeutral()
+        {
+            int neutralStartX = 1;
+            int neutralStartZ = zSize / 2;
+
+            GameObject neutral = neutralController.CreateCharacter();
+
+            Vector3 neutralPos = neutral.transform.position;
+            neutralPos.x = neutralStartX;
+            neutralPos.y = neutralController.heightOffset;
+            neutralPos.z = neutralStartZ;
+            neutral.transform.position = neutralPos;
+
+            Cell cell = GetCell(neutralStartX, neutralStartZ);
+            PlaceAtCell(cell, neutral, ObjectType.Neutral);
+
+            return 1;
         }
 
         private void GenerateMap()
