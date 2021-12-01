@@ -55,7 +55,7 @@ namespace GraveYard
             GenerateMap();
             DisplayMap();
 
-            StartCoroutine(borderGrid.CreateBorder(xSize, zSize));
+            Vector2[] gates = borderGrid.CreateBorder(xSize, zSize);
 
             // Create player starting locations
             CreatePlayerStartCharacter();
@@ -67,7 +67,7 @@ namespace GraveYard
             int obstacleCount = CreateObstacles();
 
             // Create neutral charcter starting locations and paths
-            int neutralCharacterCount = CreateNeutral(6, 1);
+            int neutralCharacterCount = CreateNeutral(gates);
 
             return new MapData(xSize * zSize, obstacleCount, neutralCharacterCount);
         }
@@ -134,64 +134,134 @@ namespace GraveYard
             enemyController.placedLocations.Add(cell);
         }
 
-        private int CreateNeutral(int x, int z)
+        private int CreateNeutral(Vector2[] gates)
         {
-            Cell[] path = CreateNeutralPath(x, z);
+            // Select two of the gates to connect
+            int startGate = Random.Range(0, gates.Length);
+            int endGate = Random.Range(0, gates.Length);
+            while (endGate == startGate)
+            {
+                endGate = Random.Range(0, gates.Length);
+            }
+
+            Cell[] path = CreateNeutralPath(gates[startGate], gates[endGate]);
 
             PlaceAtCell(
-                GetCell(x, z),
-                neutralController.CreateCharacter(x, z, path),
+                GetCell((int)gates[startGate].x, (int)gates[startGate].y),
+                neutralController.CreateCharacter((int)gates[startGate].x, (int)gates[startGate].y, path),
                 ObjectType.Neutral);
 
             return 1;
         }
 
-        private Cell[] CreateNeutralPath(int x, int z)
+        private Cell[] CreateNeutralPath(Vector2 startGate, Vector2 endGate)
         {
-            Cell currentCell = GetCell(x, z);
+            Cell currentCell = GetCell((int)startGate.x, (int)startGate.y);
 
-            int distance = 10;
             List<Cell> path = new List<Cell>();
 
             path.Add(currentCell);
             pathGrid.AddPath(currentCell.position);
 
-            Direction prevDirection = Direction.S;
             Direction direction;
-            for (int i = 1; i < distance; i++)
+            List<Direction> directions = new List<Direction>();
+
+            Debug.Log("EndGate.x: " + endGate.x);
+            Debug.Log("EndGate.y: " + endGate.y);
+
+            int outerAbortCounter = 0;
+            while (currentCell.position.x != endGate.x &&
+                   currentCell.position.z != endGate.y)
             {
-                int abortCounter = 0;
-                bool isCellSelected = false;
-                while (isCellSelected == false)
+                Debug.Log("x: " + currentCell.position.x + ".  z: " + currentCell.position.z);
+                if (outerAbortCounter > 5000) { Debug.LogWarning("OuterAbort"); break; }
+
+                float xDirection = endGate.x - currentCell.position.x;
+                float zDirection = endGate.y - currentCell.position.z;
+
+                // determine directions towards gate
+                directions.Clear();
+                if (xDirection > 0)
                 {
-                    direction = Utility.GetRandomEnum<Direction>();
-                    while (direction == prevDirection)
-                    {
-                        direction = Utility.GetRandomEnum<Direction>();
-                    }
+                    directions.Add(Direction.E);
+                }
+                else if (xDirection < 0)
+                {
+                    directions.Add(Direction.W);
+                }
+
+                if (zDirection > 0)
+                {
+                    directions.Add(Direction.N);
+                }
+                else if (zDirection < 0)
+                {
+                    directions.Add(Direction.S);
+                }
+
+                int innerAbortCounter = 0;
+                bool isCellSelected = false;
+                while (isCellSelected == false) 
+                {
+                    if (innerAbortCounter > 5000) { Debug.LogWarning("InnerAbort"); break; }
+
+                    // Get random x or z direction towards the gate
+                    direction = directions[Random.Range(0, directions.Count)];
 
                     Cell neighbor = GetNeighbor(currentCell, direction);
 
-                    if (neighbor != null)
-                    {
-                        if (path.Contains(neighbor) == false &&
-                            neighbor.IsOpen)
-                        {
-                            path.Add(neighbor);
+                    // If the cell doesn't exist, try again.
+                    if (neighbor == null) { continue; }
 
-                            pathGrid.AddPath(neighbor.position);
-                            isCellSelected = true;
+                    // If the path already contains the cell, try again.
+                    if (path.Contains(neighbor)) { continue; }
 
-                            prevDirection = direction;
-                            currentCell = neighbor;
-                        }
-                    }
+                    // If the cell includes something, try again.
+                    if (neighbor.IsOpen == false) { continue; }
 
-                    abortCounter += 1;
-                    if (abortCounter > 1000)
-                    { Debug.LogWarning("abort"); break; }
+                    // Otherwise add cell to path
+                    path.Add(neighbor);
+                    pathGrid.AddPath(neighbor.position);
+                    isCellSelected = true;
+
+                    // Set new current cell
+                    currentCell = neighbor;
                 }
             }
+            /*            for (int i = 1; i < distance; i++)
+                        {
+                            int abortCounter = 0;
+                            bool isCellSelected = false;
+                            while (isCellSelected == false)
+                            {
+                                direction = Utility.GetRandomEnum<Direction>();
+                                while (direction == prevDirection)
+                                {
+                                    direction = Utility.GetRandomEnum<Direction>();
+                                }
+
+                                Cell neighbor = GetNeighbor(currentCell, direction);
+
+                                if (neighbor != null)
+                                {
+                                    if (path.Contains(neighbor) == false &&
+                                        neighbor.IsOpen)
+                                    {
+                                        path.Add(neighbor);
+
+                                        pathGrid.AddPath(neighbor.position);
+                                        isCellSelected = true;
+
+                                        prevDirection = direction;
+                                        currentCell = neighbor;
+                                    }
+                                }
+
+                                abortCounter += 1;
+                                if (abortCounter > 1000)
+                                { Debug.LogWarning("abort"); break; }
+                            }
+                        }*/
 
             return path.ToArray();
         }

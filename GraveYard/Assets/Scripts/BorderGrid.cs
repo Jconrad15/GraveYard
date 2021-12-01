@@ -39,7 +39,7 @@ namespace GraveYard
         private int xSize;
         private int zSize;
 
-        public IEnumerator CreateBorder(int xSize, int zSize)
+        public Vector2[] CreateBorder(int xSize, int zSize)
         {
             border = new GameObject("border");
             border.transform.parent = this.transform;
@@ -52,6 +52,14 @@ namespace GraveYard
             Vector2 gate2 = new Vector2(Random.Range(0, xSize), zSize);
             Vector2 gate3 = new Vector2(-1, Random.Range(0, zSize));
             Vector2 gate4 = new Vector2(xSize, Random.Range(0, zSize));
+
+            Vector2[] gates = new Vector2[4] 
+            { 
+                new Vector2(gate1.x, 0),
+                new Vector2(gate2.x, zSize - 1),
+                new Vector2(0, gate3.y),
+                new Vector2(xSize - 1, gate4.y)
+            };
 
             for (int x = 0; x < xSize; x++)
             {
@@ -107,7 +115,6 @@ namespace GraveYard
                 
                 // Top x
                 CreateBorderSection(xSize, z, ironFenceBorder, -90f);
-
             }
 
             // Create four corners
@@ -116,7 +123,7 @@ namespace GraveYard
             CreateBorderSection(xSize, -1, ironFenceBorderCurve, 90f);
             CreateBorderSection(-1 , -1, ironFenceBorderCurve, 180f);
 
-            yield return null;
+            return gates;
         }
 
         private void CreateBorderSection(int x, int z, GameObject fenceGO, float rotation = 0f)
