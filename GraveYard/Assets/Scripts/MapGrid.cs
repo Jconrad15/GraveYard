@@ -74,8 +74,8 @@ namespace GraveYard
 
         private int CreateObstacles()
         {
-            int obstacleStartX = 5;
-            int obstacleStartZ = 5;
+            int obstacleStartX = 6;
+            int obstacleStartZ = 4;
 
             GameObject obstacle = obstacleManager.CreateObstacle(obstacleStartX, obstacleStartZ);
 
@@ -84,8 +84,8 @@ namespace GraveYard
                         ObjectType.Obstacle);
 
             // Create second obstacle
-            obstacleStartX = 4;
-            obstacleStartZ = 4;
+            obstacleStartX = 3;
+            obstacleStartZ = 5;
 
             obstacle = obstacleManager.CreateObstacle(obstacleStartX, obstacleStartZ);
 
@@ -169,12 +169,22 @@ namespace GraveYard
             Debug.Log("EndGate.x: " + endGate.x);
             Debug.Log("EndGate.y: " + endGate.y);
 
+            Debug.Log("x: " + currentCell.position.x + ".  z: " + currentCell.position.z);
+
             int outerAbortCounter = 0;
-            while (currentCell.position.x != endGate.x &&
-                   currentCell.position.z != endGate.y)
+            while (true)
             {
-                Debug.Log("x: " + currentCell.position.x + ".  z: " + currentCell.position.z);
+                outerAbortCounter += 1;
                 if (outerAbortCounter > 5000) { Debug.LogWarning("OuterAbort"); break; }
+
+                // Done break condition
+                if (currentCell.position.x == endGate.x)
+                {
+                    if (currentCell.position.z == endGate.y)
+                    {
+                        break;
+                    }
+                }
 
                 float xDirection = endGate.x - currentCell.position.x;
                 float zDirection = endGate.y - currentCell.position.z;
@@ -203,6 +213,7 @@ namespace GraveYard
                 bool isCellSelected = false;
                 while (isCellSelected == false) 
                 {
+                    innerAbortCounter += 1;
                     if (innerAbortCounter > 5000) { Debug.LogWarning("InnerAbort"); break; }
 
                     // Get random x or z direction towards the gate
@@ -226,6 +237,7 @@ namespace GraveYard
 
                     // Set new current cell
                     currentCell = neighbor;
+                    Debug.Log("x: " + currentCell.position.x + ".  z: " + currentCell.position.z);
                 }
             }
             /*            for (int i = 1; i < distance; i++)
