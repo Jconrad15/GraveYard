@@ -48,10 +48,10 @@ namespace GraveYard
             this.zSize = zSize;
 
             // Create one gate per side
-            Vector2 gate1 = new Vector2(Random.Range(0, xSize), -1);
-            Vector2 gate2 = new Vector2(Random.Range(0, xSize), zSize);
-            Vector2 gate3 = new Vector2(-1, Random.Range(0, zSize));
-            Vector2 gate4 = new Vector2(xSize, Random.Range(0, zSize));
+            Vector2 gate1 = new Vector2(Random.Range(1, xSize - 1), -1);
+            Vector2 gate2 = new Vector2(Random.Range(1, xSize - 1), zSize);
+            Vector2 gate3 = new Vector2(-1, Random.Range(1, zSize - 1));
+            Vector2 gate4 = new Vector2(xSize, Random.Range(1, zSize - 1));
 
             Vector2[] gates = new Vector2[4] 
             { 

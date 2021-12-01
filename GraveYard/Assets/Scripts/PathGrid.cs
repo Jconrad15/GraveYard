@@ -11,7 +11,9 @@ namespace GraveYard
 
         private GameObject paths;
 
-        public void AddPath(Vector3 position)
+        private int[] rotations = new int[] { 0, 90, 180, 270 };
+
+        public void AddPathGO(Vector3 position)
         {
             // Create paths parent gameobject
             if (paths == null)
@@ -24,6 +26,10 @@ namespace GraveYard
             GameObject decoration = Instantiate(pathPrefab, paths.transform);
             position.y += 0.5f;
             decoration.transform.position = position;
+
+            // Random rotation
+            decoration.transform.rotation =
+                Quaternion.Euler(0, rotations[Random.Range(0, rotations.Length)], 0);
         }
 
     }
