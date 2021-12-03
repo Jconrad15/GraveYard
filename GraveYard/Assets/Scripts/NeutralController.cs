@@ -17,7 +17,7 @@ namespace GraveYard
 
         public List<NeutralEntity> placedNeutrals = new List<NeutralEntity>();
 
-        public readonly float heightOffset = 0.5f;
+        public static readonly float heightOffset = 0.5f;
 
         // Start is called before the first frame update
         void Start()
@@ -47,7 +47,7 @@ namespace GraveYard
             // remember a path of cells on which the character moves.
             for (int i = 0; i < placedNeutrals.Count; i++)
             {
-
+                placedNeutrals[i].Move();
             }
         }
 
@@ -66,7 +66,7 @@ namespace GraveYard
 
             NeutralEntity ne = newCharacter.AddComponent<NeutralEntity>();
             placedNeutrals.Add(ne);
-            ne.Initialize(x, z, path);
+            ne.Initialize(x, z, path, mapGrid);
 
             Vector3 neutralPos = newCharacter.transform.position;
             neutralPos.x = x;

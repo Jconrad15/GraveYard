@@ -206,5 +206,12 @@ namespace GraveYard
 
             return newCharacter;
         }
+
+
+        // TODO: remove from placed locations list when neutral kills zombie
+        public void RemoveCharacter(Cell targetCell)
+        {
+
+        }
     }
 }

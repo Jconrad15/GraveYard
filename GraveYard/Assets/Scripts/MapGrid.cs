@@ -360,12 +360,40 @@ namespace GraveYard
             }
         }
 
-        private void PlaceAtCell(Cell selectedCell, GameObject characterGO, ObjectType objType)
+        public void PlaceAtCell(Cell selectedCell, GameObject characterGO, ObjectType objType)
         {
             selectedCell.SetClosed(objType);
 
             // Set parent
             characterGO.transform.parent = cellObjects[selectedCell.index].transform;
+        }
+
+        public bool TryRemoveAtCell(Cell selectedCell, ObjectType objType)
+        {
+            if (selectedCell.objectType == objType)
+            {
+                // Remove the gameobject there, and set to empty object type
+                // Get and destroy children of cell (should only be 1)
+                // First check zombies, then for ghosts
+                Zombie zombie = GetComponentInChildren<Zombie>();
+                if (zombie)
+                {
+                    Destroy(zombie.gameObject);
+                }
+                else
+                {
+                    Ghost ghost = GetComponentInChildren<Ghost>();
+                    if (ghost)
+                    {
+                        Destroy(ghost.gameObject);
+                    }
+                }
+
+                selectedCell.SetOpen();
+
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
