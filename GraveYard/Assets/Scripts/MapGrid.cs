@@ -148,18 +148,18 @@ namespace GraveYard
                 neutralController.CreateCharacter((int)gates[startGate].x, (int)gates[startGate].y, path, cell),
                 ObjectType.Neutral);
 
-/*            // Select opposite gates to connect for path 2
+            // Select opposite gates to connect for path 2
             startGate = 3;
             endGate = 2;
 
             path = CreateNeutralPath(gates[startGate], gates[endGate]);
-
+            Cell cell2 = GetCell((int)gates[startGate].x, (int)gates[startGate].y);
             PlaceAtCell(
-                GetCell((int)gates[startGate].x, (int)gates[startGate].y),
-                neutralController.CreateCharacter((int)gates[startGate].x, (int)gates[startGate].y, path),
-                ObjectType.Neutral);*/
+                cell2,
+                neutralController.CreateCharacter((int)gates[startGate].x, (int)gates[startGate].y, path, cell2),
+                ObjectType.Neutral);
 
-            return 1;
+            return 2;
         }
 
         private Cell[] CreateNeutralPath(Vector2 startGate, Vector2 endGate)
@@ -170,6 +170,7 @@ namespace GraveYard
 
             path.Add(currentCell);
             pathGrid.AddPathGO(currentCell.position);
+            currentCell.SetAsPath();
 
             Direction direction;
             List<Direction> directions = new List<Direction>();

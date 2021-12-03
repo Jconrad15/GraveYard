@@ -21,6 +21,7 @@ namespace GraveYard
         public List<Cell> placedLocations = new List<Cell>();
 
         public readonly float heightOffset = 0.5f;
+        private readonly float pathWeightOffset = 0.75f;
 
         // Start is called before the first frame update
         void Start()
@@ -146,6 +147,12 @@ namespace GraveYard
                     humanLocations);
 
                 weights[i] -= distance;
+
+                // Further decrease the weight if the cell is on a path
+                if (potentialLocations[i].IsPath == true)
+                {
+                    weights[i] -= pathWeightOffset;
+                }
             }
 
             // Select location with first or second largest weight

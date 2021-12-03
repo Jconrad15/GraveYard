@@ -13,12 +13,17 @@ namespace GraveYard
         public bool IsOpen { get; protected set; }
         public ObjectType objectType;
 
+        public bool IsPath { get; protected set; }
+
         public Cell(int newIndex, Vector3 newPosition)
         {
             index = newIndex;
             position = newPosition;
             IsOpen = true;
             objectType = ObjectType.Empty;
+
+            // Defaults to not a path
+            IsPath = false;
         }
 
         public void SetOpen()
@@ -31,6 +36,11 @@ namespace GraveYard
         {
             IsOpen = false;
             objectType = objType;
+        }
+
+        public void SetAsPath()
+        {
+            IsPath = true;
         }
 
     }
