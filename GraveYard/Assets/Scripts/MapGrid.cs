@@ -385,6 +385,8 @@ namespace GraveYard
                 if (zombie)
                 {
                     Destroy(zombie.gameObject);
+                    // Also remove from enemy placed locations
+                    enemyController.RemoveLocation(selectedCell);
                 }
 
                 Ghost ghost = cellGO.GetComponentInChildren<Ghost>();

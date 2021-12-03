@@ -209,9 +209,12 @@ namespace GraveYard
 
 
         // TODO: remove from placed locations list when neutral kills zombie
-        public void RemoveCharacter(Cell targetCell)
+        public void RemoveLocation(Cell targetCell)
         {
-
+            if (placedLocations.Contains(targetCell))
+            {
+                placedLocations.Remove(targetCell);
+            }
         }
     }
 }
