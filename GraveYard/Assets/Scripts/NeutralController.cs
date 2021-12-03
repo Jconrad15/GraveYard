@@ -59,14 +59,14 @@ namespace GraveYard
             turnManager.NextTurn();
         }
 
-        public GameObject CreateCharacter(int x, int z, Cell[] path)
+        public GameObject CreateCharacter(int x, int z, Cell[] path, Cell startCell)
         {
             GameObject newCharacter = Instantiate(neutralPrefab, this.transform);
             newCharacter.name = "newNeutral";
 
             NeutralEntity ne = newCharacter.AddComponent<NeutralEntity>();
             placedNeutrals.Add(ne);
-            ne.Initialize(x, z, path, mapGrid);
+            ne.Initialize(x, z, path, mapGrid, startCell);
 
             Vector3 neutralPos = newCharacter.transform.position;
             neutralPos.x = x;

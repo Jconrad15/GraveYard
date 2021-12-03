@@ -142,12 +142,13 @@ namespace GraveYard
 
             Cell[] path = CreateNeutralPath(gates[startGate], gates[endGate]);
 
+            Cell cell = GetCell((int)gates[startGate].x, (int)gates[startGate].y);
             PlaceAtCell(
-                GetCell((int)gates[startGate].x, (int)gates[startGate].y),
-                neutralController.CreateCharacter((int)gates[startGate].x, (int)gates[startGate].y, path),
+                cell,
+                neutralController.CreateCharacter((int)gates[startGate].x, (int)gates[startGate].y, path, cell),
                 ObjectType.Neutral);
 
-            // Select opposite gates to connect for path 2
+/*            // Select opposite gates to connect for path 2
             startGate = 3;
             endGate = 2;
 
@@ -156,9 +157,9 @@ namespace GraveYard
             PlaceAtCell(
                 GetCell((int)gates[startGate].x, (int)gates[startGate].y),
                 neutralController.CreateCharacter((int)gates[startGate].x, (int)gates[startGate].y, path),
-                ObjectType.Neutral);
+                ObjectType.Neutral);*/
 
-            return 2;
+            return 1;
         }
 
         private Cell[] CreateNeutralPath(Vector2 startGate, Vector2 endGate)

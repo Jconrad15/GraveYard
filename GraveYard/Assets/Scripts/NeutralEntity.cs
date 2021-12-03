@@ -18,7 +18,7 @@ namespace GraveYard
 
         private Cell currentCell;
 
-        public void Initialize(int x, int z, Cell[] newPath, MapGrid mG)
+        public void Initialize(int x, int z, Cell[] newPath, MapGrid mG, Cell startCell)
         {
             xStart = x;
             zStart = z;
@@ -36,36 +36,41 @@ namespace GraveYard
                 
             }
 
-            // Peek for current cell
-            currentCell = path.Peek();
+            // Set current cell
+            currentCell = startCell;
+            // Need to add this to reverse path
+            reversePath.Push(currentCell);
         }
 
 
         public void Move()
         {
-            
             if (isForward)
             {
                 Cell nextCell = path.Pop();
                 if (TryMoveNeutralEntity(this.gameObject, nextCell))
                 {
-                    // If moved, add cell to reverse path
-                    reversePath.Push(nextCell);
+                    // Check if the path was emptied to last cell
+                    if (path.Count == 0)
+                    {
+                        isForward = false;
+                        // Add back to path
+                        path.Push(nextCell);
+                    }
+                    else
+                    {
+                        // If moved, add cell to reverse path
+                        reversePath.Push(nextCell);
+                    }
+
                     // Also set current cell to open
                     currentCell.SetOpen();
                     currentCell = nextCell;
-                    
                 }
                 else
                 {
                     // If couldn't move, replace cell
                     path.Push(nextCell);
-                }
-
-                // Check if the path was emptied
-                if (path.Count == 0)
-                {
-                    isForward = false;
                 }
             }
             else
@@ -73,8 +78,19 @@ namespace GraveYard
                 Cell nextCell = reversePath.Pop();
                 if (TryMoveNeutralEntity(this.gameObject, nextCell))
                 {
-                    // If moved, add cell to path
-                    path.Push(nextCell);
+                    // Check if the path was emptied to last cell
+                    if (reversePath.Count == 0)
+                    {
+                        isForward = true;
+                        // Add back to revserse path
+                        reversePath.Push(nextCell);
+                    }
+                    else
+                    {
+                        // If moved, add cell to path
+                        path.Push(nextCell);
+                    }
+
                     // Also set current cell to open
                     currentCell.SetOpen();
                     currentCell = nextCell;
@@ -84,16 +100,8 @@ namespace GraveYard
                     // If couldn't move, replace cell
                     reversePath.Push(nextCell);
                 }
-
-                // Check if the reverse path was emptied
-                if (reversePath.Count == 0)
-                {
-                    isForward = true;
-                }
-
             }
         }
-
 
         public bool TryMoveNeutralEntity(GameObject neutralEntity, Cell targetCell)
         {
