@@ -373,20 +373,23 @@ namespace GraveYard
             if (selectedCell.objectType == objType)
             {
                 // Remove the gameobject there, and set to empty object type
-                // Get and destroy children of cell (should only be 1)
-                // First check zombies, then for ghosts
-                Zombie zombie = GetComponentInChildren<Zombie>();
+                //TODO: make this better
+                string cellName = "Cell " + selectedCell.index.ToString();
+
+                GameObject cellGO = this.gameObject.transform.Find(cellName).gameObject;
+                if (cellGO == null) { Debug.LogError("no named cell"); return false; }
+
+
+                Zombie zombie = cellGO.GetComponentInChildren<Zombie>();
                 if (zombie)
                 {
                     Destroy(zombie.gameObject);
                 }
-                else
+
+                Ghost ghost = cellGO.GetComponentInChildren<Ghost>();
+                if (ghost)
                 {
-                    Ghost ghost = GetComponentInChildren<Ghost>();
-                    if (ghost)
-                    {
-                        Destroy(ghost.gameObject);
-                    }
+                    Destroy(ghost.gameObject);
                 }
 
                 selectedCell.SetOpen();
